@@ -640,6 +640,15 @@
     const isoOptions = [50, 100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200, 102400];
     const ndOptions = [0, 0.3, 0.6, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const shutterOptions = [
+      { label: "300s", value: 300 },
+      { label: "270s", value: 270 },
+      { label: "240s", value: 240 },
+      { label: "210s", value: 210 },
+      { label: "180s", value: 180 },
+      { label: "150s", value: 150 },
+      { label: "120s", value: 120 },
+      { label: "90s", value: 90 },
+      { label: "60s", value: 60 },
       { label: "30s", value: 30 },
       { label: "25s", value: 25 },
       { label: "20s", value: 20 },
@@ -797,6 +806,30 @@
     let countdownTimer = null;
     let countdownEnd = 0;
     let countdownSeconds = NaN;
+    let audioContext = null;
+
+    function initAudio() {
+      if (audioContext) return;
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      audioContext = new AudioCtx();
+    }
+
+    function playBeep() {
+      if (!audioContext) return;
+      if (audioContext.state === "suspended") {
+        audioContext.resume();
+      }
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      osc.type = "sine";
+      osc.frequency.value = 880;
+      gain.gain.value = 0.12;
+      osc.connect(gain);
+      gain.connect(audioContext.destination);
+      osc.start();
+      osc.stop(audioContext.currentTime + 0.35);
+    }
 
     function stopCountdown(message) {
       if (countdownTimer) {
@@ -818,11 +851,13 @@
         stopCountdown("--");
         return;
       }
+      initAudio();
       countdownEnd = Date.now() + seconds * 1000;
       countdownBtn.textContent = "停止";
       countdownTimer = setInterval(() => {
         const remaining = (countdownEnd - Date.now()) / 1000;
         if (remaining <= 0) {
+          playBeep();
           stopCountdown("完成");
           return;
         }
