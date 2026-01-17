@@ -632,29 +632,68 @@
     let countdownMode = "base";
     let solveSuggestedShutter = NaN;
 
-    const commonDenominators = [1, 2, 4, 8, 15, 30, 60, 125, 250, 500, 1000, 2000, 4000, 8000];
+    const commonDenominators = [
+      1, 2, 3, 4, 5, 6, 8, 10, 13, 15, 20, 25, 30, 40, 50, 60, 80, 100, 125, 160, 200,
+      250, 320, 400, 500, 640, 800, 1000, 1250, 1600, 2000, 2500, 3200, 4000, 5000, 6400, 8000
+    ];
     const apertureOptions = [1.0, 1.4, 2, 2.8, 4, 5.6, 8, 11, 16, 22, 32];
     const isoOptions = [50, 100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200, 102400];
     const ndOptions = [0, 0.3, 0.6, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const shutterOptions = [
       { label: "30s", value: 30 },
+      { label: "25s", value: 25 },
+      { label: "20s", value: 20 },
       { label: "15s", value: 15 },
+      { label: "13s", value: 13 },
+      { label: "10s", value: 10 },
       { label: "8s", value: 8 },
+      { label: "6s", value: 6 },
+      { label: "5s", value: 5 },
       { label: "4s", value: 4 },
+      { label: "3.2s", value: 3.2 },
+      { label: "2.5s", value: 2.5 },
       { label: "2s", value: 2 },
+      { label: "1.6s", value: 1.6 },
+      { label: "1.3s", value: 1.3 },
       { label: "1s", value: 1 },
+      { label: "1/1.3", value: 1 / 1.3 },
+      { label: "1/1.6", value: 1 / 1.6 },
       { label: "1/2", value: 0.5 },
-      { label: "1/4", value: 0.25 },
-      { label: "1/8", value: 0.125 },
+      { label: "1/2.5", value: 1 / 2.5 },
+      { label: "1/3.2", value: 1 / 3.2 },
+      { label: "1/4", value: 1 / 4 },
+      { label: "1/5", value: 1 / 5 },
+      { label: "1/6", value: 1 / 6 },
+      { label: "1/8", value: 1 / 8 },
+      { label: "1/10", value: 1 / 10 },
+      { label: "1/13", value: 1 / 13 },
       { label: "1/15", value: 1 / 15 },
+      { label: "1/20", value: 1 / 20 },
+      { label: "1/25", value: 1 / 25 },
       { label: "1/30", value: 1 / 30 },
+      { label: "1/40", value: 1 / 40 },
+      { label: "1/50", value: 1 / 50 },
       { label: "1/60", value: 1 / 60 },
+      { label: "1/80", value: 1 / 80 },
+      { label: "1/100", value: 1 / 100 },
       { label: "1/125", value: 1 / 125 },
+      { label: "1/160", value: 1 / 160 },
+      { label: "1/200", value: 1 / 200 },
       { label: "1/250", value: 1 / 250 },
+      { label: "1/320", value: 1 / 320 },
+      { label: "1/400", value: 1 / 400 },
       { label: "1/500", value: 1 / 500 },
+      { label: "1/640", value: 1 / 640 },
+      { label: "1/800", value: 1 / 800 },
       { label: "1/1000", value: 1 / 1000 },
+      { label: "1/1250", value: 1 / 1250 },
+      { label: "1/1600", value: 1 / 1600 },
       { label: "1/2000", value: 1 / 2000 },
+      { label: "1/2500", value: 1 / 2500 },
+      { label: "1/3200", value: 1 / 3200 },
       { label: "1/4000", value: 1 / 4000 },
+      { label: "1/5000", value: 1 / 5000 },
+      { label: "1/6400", value: 1 / 6400 },
       { label: "1/8000", value: 1 / 8000 }
     ];
 
