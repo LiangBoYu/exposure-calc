@@ -219,8 +219,18 @@
 
     .solve-active {
       border-radius: 12px;
-      outline: 1px solid rgba(88, 214, 200, 0.6);
-      box-shadow: 0 0 0 2px rgba(88, 214, 200, 0.2);
+      outline: 1px solid rgba(111, 168, 255, 0.7);
+      box-shadow: 0 0 0 2px rgba(111, 168, 255, 0.25);
+      background: rgba(111, 168, 255, 0.08);
+    }
+
+    .solve-active .wheel {
+      border-color: rgba(111, 168, 255, 0.7);
+      background: rgba(111, 168, 255, 0.18);
+    }
+
+    .solve-active .wheel-item.is-selected {
+      color: #b7d4ff;
     }
 
     .field-highlight .wheel {
@@ -230,6 +240,15 @@
 
     .field-highlight .wheel-item.is-selected {
       color: #ffd17a;
+    }
+
+    .base-field .wheel {
+      border-color: rgba(124, 215, 155, 0.5);
+      background: rgba(124, 215, 155, 0.12);
+    }
+
+    .base-field .wheel-item.is-selected {
+      color: #b8f0cf;
     }
 
     .wheel-select {
@@ -447,22 +466,22 @@
     <section class="card compact-card">
       <div class="section-title">基準參數 <span class="pill">Base</span></div>
       <div class="grid row">
-        <div>
+        <div class="base-field">
           <label for="base-iso">ISO</label>
           <select id="base-iso" class="wheel-select"></select>
           <div class="wheel" data-wheel="base-iso"></div>
         </div>
-        <div>
+        <div class="base-field">
           <label for="base-aperture">光圈 (f)</label>
           <select id="base-aperture" class="wheel-select"></select>
           <div class="wheel" data-wheel="base-aperture"></div>
         </div>
-        <div>
+        <div class="base-field">
           <label for="base-shutter">快門</label>
           <select id="base-shutter" class="wheel-select"></select>
           <div class="wheel" data-wheel="base-shutter"></div>
         </div>
-        <div>
+        <div class="base-field">
           <label for="base-nd">ND 濾鏡 (檔)</label>
           <select id="base-nd" class="wheel-select"></select>
           <div class="wheel" data-wheel="base-nd"></div>
