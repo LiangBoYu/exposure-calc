@@ -4,230 +4,129 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>曝光計算器 Pro</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Fraunces:wght@600;700&display=swap" rel="stylesheet" />
+  <title>曝光計算器</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&family=Fraunces:wght@600&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --bg: #0e1b26;
-      --bg2: #1b2a3b;
-      --ink: #f4f2ed;
-      --muted: #b7c4cf;
-      --accent: #f1a208;
-      --accent2: #58d6c8;
-      --card: rgba(255, 255, 255, 0.08);
-      --stroke: rgba(255, 255, 255, 0.18);
-      --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-    }
+    :root { --bg: #0e1b26; --bg2: #1b2a3b; --ink: #f4f2ed; --muted: #b7c4cf; --accent: #f1a208; --accent2: #58d6c8; --card: rgba(255, 255, 255, 0.08); --stroke: rgba(255, 255, 255, 0.18); }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body {
-      margin: 0;
-      color: var(--ink);
-      font-family: "Space Grotesk", sans-serif;
-      background: radial-gradient(900px 400px at 10% 0%, rgba(88, 214, 200, 0.25), transparent 60%),
-                  linear-gradient(160deg, var(--bg), var(--bg2));
-      min-height: 100svh;
-      padding-top: env(safe-area-inset-top);
-    }
-    header { padding: 24px 16px 8px; text-align: center; }
-    h1 { font-family: "Fraunces", serif; font-size: 28px; margin: 0 0 4px; }
-    header p { margin: 0; color: var(--muted); font-size: 11px; }
-    main { display: grid; gap: 8px; padding: 8px 10px 18px; width: min(94vw, 720px); margin: 0 auto; }
-    .card { background: var(--card); border: 1px solid var(--stroke); border-radius: 14px; padding: 12px; backdrop-filter: blur(10px); }
-    .section-title { font-weight: 600; font-size: 13px; margin: 0 0 6px; display: flex; align-items: center; gap: 8px; }
+    body { margin: 0; color: var(--ink); font-family: "Space Grotesk", sans-serif; background: linear-gradient(160deg, var(--bg), var(--bg2)); min-height: 100svh; }
+    header { padding: 24px 16px; text-align: center; }
+    main { display: grid; gap: 10px; padding: 10px; width: min(96vw, 600px); margin: 0 auto; }
+    .card { background: var(--card); border: 1px solid var(--stroke); border-radius: 14px; padding: 15px; backdrop-filter: blur(10px); }
+    .section-title { font-weight: 600; font-size: 13px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
     .pill { font-size: 10px; padding: 2px 8px; border-radius: 999px; background: rgba(88, 214, 200, 0.2); color: var(--accent2); }
-    .grid.row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; }
-    label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; }
-    .label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-    input, select { width: 100%; padding: 10px; border-radius: 12px; border: 1px solid transparent; background: rgba(255, 255, 255, 0.12); color: var(--ink); font-size: 14px; outline: none; }
-    button { border: none; border-radius: 999px; padding: 8px 16px; font-weight: 600; cursor: pointer; background: var(--accent); color: #1a1202; }
-    .lock-toggle { background: rgba(88, 214, 200, 0.2); color: var(--accent2); font-size: 12px; padding: 4px 10px; }
-    .time { font-size: 34px; font-weight: 600; margin: 4px 0 8px; text-align: center; color: var(--accent); }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+    select { width: 100%; padding: 12px; border-radius: 10px; border: none; background: rgba(255, 255, 255, 0.12); color: var(--ink); font-size: 16px; }
+    .time { font-size: 38px; font-weight: 700; color: var(--accent); text-align: center; margin: 15px 0; }
+    button { width: 100%; border: none; border-radius: 999px; padding: 12px; font-weight: 600; background: var(--accent); color: #1a1202; }
     .note { color: var(--muted); font-size: 11px; line-height: 1.5; margin-top: 10px; }
-    .formula { border-top: 1px solid var(--stroke); padding-top: 10px; margin-top: 15px; }
-    #scene-ev { font-size: 24px; color: var(--accent2); }
   </style>
 </head>
 <body>
-  <header>
-    <h1>曝光計算器</h1>
-    <p>EV / ISO / 快門 / 光圈 / ND 濾鏡 — 專為長曝與手機使用設計</p>
-  </header>
-
+  <header><h1>曝光計算器</h1></header>
   <main>
     <section class="card">
-      <div class="section-title">環境亮度 <span class="pill">Scene EV</span></div>
-      <div style="text-align: center; padding: 10px 0;">
-        <span style="font-size: 12px; color: var(--muted);">環境 EV (不含 ND)</span><br/>
-        <strong id="scene-ev">--</strong>
-      </div>
+      <div class="section-title">環境亮度 <span class="pill">EV</span></div>
+      <div style="text-align:center; font-size: 24px; color: var(--accent2);" id="scene-ev">--</div>
     </section>
-
     <section class="card">
       <div class="section-title">基準參數 <span class="pill">Base</span></div>
-      <div class="grid row">
+      <div class="grid">
         <div><label>光圈 (f)</label><select id="base-aperture"></select></div>
         <div><label>快門</label><select id="base-shutter"></select></div>
         <div><label>ISO</label><select id="base-iso"></select></div>
         <div><label>ND 檔數</label><select id="base-nd"></select></div>
       </div>
-      <div class="note">提示：基準值為當前實測或環境設定。</div>
     </section>
-
     <section class="card">
       <div class="section-title">目標參數 <span class="pill">Target</span></div>
-      <div class="grid row">
-        <div>
-          <div class="label-row"><label>ND (檔)</label><button class="lock-toggle" type="button" data-lock="target-nd">解鎖</button></div>
-          <select id="target-nd"></select>
-        </div>
-        <div>
-          <div class="label-row"><label>光圈 (f)</label><button class="lock-toggle" type="button" data-lock="target-aperture">解鎖</button></div>
-          <select id="target-aperture"></select>
-        </div>
-        <div>
-          <div class="label-row"><label>ISO</label><button class="lock-toggle" type="button" data-lock="target-iso">解鎖</button></div>
-          <select id="target-iso"></select>
-        </div>
+      <div class="grid">
+        <div><label>光圈 (f)</label><select id="target-aperture"></select></div>
+        <div><label>ISO</label><select id="target-iso"></select></div>
+        <div style="grid-column: span 2;"><label>ND (檔)</label><select id="target-nd"></select></div>
       </div>
-      <div class="note" id="result-note">請檢查參數以顯示結果。</div>
+      <div class="note" id="result-note">計算中...</div>
     </section>
-
-    <section class="card" style="text-align: center;">
-      <div class="section-title">計算快門 <span class="pill">Result</span></div>
-      <div class="time"><strong id="base-time">--</strong></div>
-      <div style="color: var(--muted); font-size: 12px; margin-bottom: 10px;">
-        剩餘倒數：<strong id="countdown-display" style="color: var(--ink)">--</strong>
-      </div>
-      <button id="countdown-btn" type="button" style="width: 100%;">開始倒數</button>
-      
-      <div class="note formula">
-        <strong>曝光計算公式</strong><br />
-        EV₁₀₀ = log₂(N²/t) - log₂(ISO/100)<br />
-        環境 EV = EV₁₀₀ + ND<sub>base</sub><br />
-        目標快門 t = N² / (2<sup>(環境 EV - ND<sub>target</sub>)</sup> × (ISO/100))
-      </div>
+    <section class="card">
+      <div class="time" id="base-time">--</div>
+      <button id="countdown-btn">開始倒數</button>
+      <div class="note" style="text-align:center">剩餘：<span id="countdown-display">--</span></div>
     </section>
   </main>
 
   <script>
-    const baseAperture = document.getElementById("base-aperture");
-    const baseShutter = document.getElementById("base-shutter");
-    const baseIso = document.getElementById("base-iso");
-    const baseNd = document.getElementById("base-nd");
-    const targetAperture = document.getElementById("target-aperture");
-    const targetIso = document.getElementById("target-iso");
-    const targetNd = document.getElementById("target-nd");
-    const lockButtons = document.querySelectorAll("[data-lock]");
-    const sceneEvEl = document.getElementById("scene-ev");
-    const baseTimeEl = document.getElementById("base-time");
-    const countdownBtn = document.getElementById("countdown-btn");
-    const countdownDisplay = document.getElementById("countdown-display");
-    const resultNoteEl = document.getElementById("result-note");
+    const selects = {
+      ba: document.getElementById("base-aperture"),
+      bs: document.getElementById("base-shutter"),
+      bi: document.getElementById("base-iso"),
+      bn: document.getElementById("base-nd"),
+      ta: document.getElementById("target-aperture"),
+      ti: document.getElementById("target-iso"),
+      tn: document.getElementById("target-nd")
+    };
 
-    const commonDenominators = [1, 2, 4, 8, 15, 30, 60, 125, 250, 500, 1000, 2000, 4000, 8000];
-    const apertureOptions = [1.0, 1.4, 2, 2.8, 4, 5.6, 8, 11, 16, 22, 32];
-    const isoOptions = [50, 100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600];
-    const ndOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 15, 20];
-    const shutterOptions = [
-      { label: "30s", value: 30 }, { label: "15s", value: 15 }, { label: "8s", value: 8 }, 
-      { label: "4s", value: 4 }, { label: "2s", value: 2 }, { label: "1s", value: 1 },
-      { label: "1/2", value: 0.5 }, { label: "1/4", value: 0.25 }, { label: "1/8", value: 0.125 },
-      { label: "1/15", value: 1/15 }, { label: "1/30", value: 1/30 }, { label: "1/60", value: 1/60 },
-      { label: "1/125", value: 1/125 }, { label: "1/250", value: 1/250 }, { label: "1/500", value: 1/500 }
+    const fOps = [1.0, 1.4, 2, 2.8, 4, 5.6, 8, 11, 16, 22, 32];
+    const iOps = [50, 100, 200, 400, 800, 1600, 3200, 6400, 12800];
+    const nOps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 15];
+    const sOps = [
+      {l:"30s",v:30},{l:"15s",v:15},{l:"8s",v:8},{l:"4s",v:4},{l:"2s",v:2},{l:"1s",v:1},
+      {l:"1/2",v:0.5},{l:"1/4",v:0.25},{l:"1/8",v:0.125},{l:"1/15",v:1/15},{l:"1/30",v:1/30},
+      {l:"1/60",v:1/60},{l:"1/125",v:1/125},{l:"1/250",v:1/250},{l:"1/500",v:1/500}
     ];
 
-    function log2(x) { return Math.log(x) / Math.log(2); }
+    function log2(x) { return Math.log(x)/Math.log(2); }
 
-    function formatShutter(seconds) {
-      if (!isFinite(seconds) || seconds <= 0) return "--";
-      if (seconds >= 1) return `${seconds.toFixed(2)}s`;
-      let best = commonDenominators[0], bestErr = Math.abs(seconds - 1 / best);
-      for (const d of commonDenominators) {
-        const err = Math.abs(seconds - 1 / d);
-        if (err < bestErr) { best = d; bestErr = err; }
-      }
-      return `1/${best}s`;
-    }
-
-    function populateOptions() {
-      const add = (el, opts, fmt) => {
-        opts.forEach(o => {
-          const opt = document.createElement("option");
-          opt.value = o.value !== undefined ? o.value : o;
-          opt.textContent = o.label !== undefined ? o.label : (fmt ? fmt(o) : o);
-          el.appendChild(opt);
-        });
-      };
-      add(baseAperture, apertureOptions, v => `f/${v}`);
-      add(targetAperture, apertureOptions, v => `f/${v}`);
-      add(baseIso, isoOptions);
-      add(targetIso, isoOptions);
-      add(baseNd, ndOptions, v => v === 0 ? "0 (無)" : `${v} 檔`);
-      add(targetNd, ndOptions, v => v === 0 ? "0 (無)" : `${v} 檔`);
-      add(baseShutter, shutterOptions);
-
-      baseAperture.value = "16"; baseShutter.value = "15"; baseIso.value = "100";
-    }
-
-    function render() {
-      const N1 = Number(baseAperture.value), t1 = Number(baseShutter.value);
-      const I1 = Number(baseIso.value), ND1 = Number(baseNd.value);
-      const N2 = Number(targetAperture.value), I2 = Number(targetIso.value), ND2 = Number(targetNd.value);
-
-      // 計算環境真實 EV
-      const ev100 = log2((N1 * N1) / t1) - log2(I1 / 100);
-      const sceneEv = ev100 + ND1;
-      sceneEvEl.textContent = isFinite(sceneEv) ? sceneEv.toFixed(2) : "--";
-
-      // 計算目標快門
-      const t2 = (N2 * N2) / (Math.pow(2, sceneEv - ND2) * (I2 / 100));
-      baseTimeEl.textContent = formatShutter(t2);
-      countdownSeconds = t2;
-
-      // 檔數描述
-      const apS = 2 * log2(N2 / N1), isoS = log2(I2 / I1), ndS = ND2 - ND1;
-      const fmt = v => (Math.abs(v) < 0.01 ? "無變動" : `${v > 0 ? '+' : ''}${v.toFixed(1)} 檔`);
-      resultNoteEl.innerHTML = `相較基準：光圈 ${fmt(apS)}、ISO ${fmt(isoS)}、ND ${fmt(ndS)}`;
-    }
-
-    // 鎖定功能
-    function syncLocks() {
-      lockButtons.forEach(btn => {
-        const target = document.getElementById(btn.dataset.lock);
-        const locked = btn.dataset.locked !== "false";
-        target.disabled = locked;
-        btn.textContent = locked ? "解鎖" : "鎖定";
-        if (locked) {
-          if (target.id.includes("aperture")) target.value = baseAperture.value;
-          if (target.id.includes("iso")) target.value = baseIso.value;
-          if (target.id.includes("nd")) target.value = baseNd.value;
-        }
+    function init() {
+      fOps.forEach(v => {
+        selects.ba.add(new Option(`f/${v}`, v));
+        selects.ta.add(new Option(`f/${v}`, v));
       });
+      sOps.forEach(o => selects.bs.add(new Option(o.l, o.v)));
+      iOps.forEach(v => {
+        selects.bi.add(new Option(v, v));
+        selects.ti.add(new Option(v, v));
+      });
+      nOps.forEach(v => {
+        selects.bn.add(new Option(`${v} 檔`, v));
+        selects.tn.add(new Option(`${v} 檔`, v));
+      });
+
+      selects.ba.value = "16"; selects.bs.value = "15"; selects.bi.value = "100";
+      selects.ta.value = "8"; selects.ti.value = "6400"; selects.tn.value = "5";
+
+      const calc = () => {
+        const N1 = Number(selects.ba.value), t1 = Number(selects.bs.value), I1 = Number(selects.bi.value), ND1 = Number(selects.bn.value);
+        const N2 = Number(selects.ta.value), I2 = Number(selects.ti.value), ND2 = Number(selects.tn.value);
+
+        const ev100 = log2((N1*N1)/t1) - log2(I1/100);
+        const sceneEv = ev100 + ND1;
+        const t2 = (N2*N2) / (Math.pow(2, sceneEv - ND2) * (I2/100));
+
+        document.getElementById("scene-ev").textContent = sceneEv.toFixed(2);
+        document.getElementById("base-time").textContent = t2 >= 1 ? ${t2.toFixed(1)}s : `1/${Math.round(1/t2)}s`;
+        window.currentT2 = t2;
+
+        const apS = 2*log2(N2/N1), isoS = log2(I2/I1), ndS = ND2-ND1;
+        document.getElementById("result-note").innerHTML = `光圈: ${apS.toFixed(1)}檔 | ISO: ${isoS.toFixed(1)}檔 | ND: ${ndS.toFixed(1)}檔`;
+      };
+
+      Object.values(selects).forEach(s => s.onchange = calc);
+      calc();
     }
 
-    // 倒數計時功能
     let timer = null;
-    countdownBtn.onclick = () => {
-      if (timer) { clearInterval(timer); timer = null; countdownBtn.textContent = "開始倒數"; return; }
-      let rem = countdownSeconds;
-      if (!rem || rem <= 0) return;
-      countdownBtn.textContent = "停止";
+    document.getElementById("countdown-btn").onclick = () => {
+      if (timer) { clearInterval(timer); timer = null; return; }
+      let rem = window.currentT2;
       timer = setInterval(() => {
         rem -= 0.1;
-        if (rem <= 0) { clearInterval(timer); timer = null; countdownDisplay.textContent = "完成"; countdownBtn.textContent = "開始倒數"; return; }
-        countdownDisplay.textContent = `${rem.toFixed(1)}s`;
+        if (rem <= 0) { clearInterval(timer); timer = null; document.getElementById("countdown-display").textContent = "完成"; return; }
+        document.getElementById("countdown-display").textContent = rem.toFixed(1) + "s";
       }, 100);
     };
 
-    [...inputs, targetAperture, targetIso, targetNd].forEach(i => i.onchange = () => { syncLocks(); render(); });
-    lockButtons.forEach(b => b.onclick = () => { b.dataset.locked = b.dataset.locked === "false" ? "true" : "false"; syncLocks(); render(); });
-
-    populateOptions();
-    syncLocks();
-    render();
+    init();
   </script>
 </body>
 </html>
