@@ -1,9 +1,11 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>曝光計算器 (EV/ISO/快門/光圈/ND)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>曝光計算器 Pro</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Fraunces:wght@600;700&display=swap" rel="stylesheet" />
@@ -19,297 +21,33 @@
       --stroke: rgba(255, 255, 255, 0.18);
       --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
     }
-
-    * { box-sizing: border-box; }
-
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body {
       margin: 0;
       color: var(--ink);
-      font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-      background:
-        radial-gradient(900px 400px at 10% 0%, rgba(88, 214, 200, 0.25), transparent 60%),
-        radial-gradient(700px 500px at 90% 10%, rgba(241, 162, 8, 0.18), transparent 55%),
-        linear-gradient(160deg, var(--bg), var(--bg2));
+      font-family: "Space Grotesk", sans-serif;
+      background: radial-gradient(900px 400px at 10% 0%, rgba(88, 214, 200, 0.25), transparent 60%),
+                  linear-gradient(160deg, var(--bg), var(--bg2));
       min-height: 100svh;
+      padding-top: env(safe-area-inset-top);
     }
-
-    header {
-      padding: 12px 16px 4px;
-      text-align: center;
-      animation: fadeIn 700ms ease-out both;
-    }
-
-    h1 {
-      font-family: "Fraunces", "Times New Roman", serif;
-      font-size: clamp(18px, 4vw, 28px);
-      margin: 0 0 4px;
-      letter-spacing: 0.3px;
-    }
-
-    header p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    main {
-      display: grid;
-      gap: 8px;
-      padding: 8px 10px 18px;
-      width: min(94vw, 720px);
-      max-width: 720px;
-      margin: 0 auto;
-      animation: riseIn 800ms ease-out both 120ms;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--stroke);
-      border-radius: 14px;
-      padding: 12px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-    }
-
-    .compact-card {
-      padding: 10px;
-    }
-
-    .section-title {
-      font-weight: 600;
-      letter-spacing: 0.2px;
-      margin: 0 0 6px;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .pill {
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: rgba(88, 214, 200, 0.2);
-      color: var(--accent2);
-    }
-
-    .grid {
-      display: grid;
-      gap: 12px;
-    }
-
-    .grid.two {
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    }
-
-    .grid.row {
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 6px;
-    }
-
-    label {
-      display: block;
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    .label-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 6px;
-    }
-
-    .label-row label {
-      margin-bottom: 0;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 12px;
-      border: 1px solid transparent;
-      background: rgba(255, 255, 255, 0.12);
-      color: var(--ink);
-      font-size: 13px;
-      outline: none;
-      transition: border 150ms ease, box-shadow 150ms ease;
-    }
-
-    input:focus, select:focus {
-      border-color: var(--accent2);
-      box-shadow: 0 0 0 2px rgba(88, 214, 200, 0.18);
-    }
-
-    select:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
-
-    select option {
-      color: #0f1720;
-      background: #f4f2ed;
-    }
-
-    input[disabled] {
-      opacity: 0.65;
-    }
-
-    button {
-      border: none;
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-weight: 600;
-      cursor: pointer;
-      background: var(--accent);
-      color: #1a1202;
-      transition: transform 120ms ease, filter 120ms ease;
-    }
-
-    button:hover {
-      filter: brightness(1.05);
-      transform: translateY(-1px);
-    }
-
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .lock-toggle {
-      background: rgba(88, 214, 200, 0.2);
-      color: var(--accent2);
-      font-size: 12px;
-      padding: 4px 10px;
-    }
-
-    .countdown {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 8px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .countdown strong {
-      color: var(--ink);
-      font-size: 14px;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 8px;
-    }
-
-    .stat {
-      padding: 10px;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-    }
-
-    .stat span {
-      display: block;
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    .stat strong {
-      font-size: 17px;
-      letter-spacing: 0.2px;
-    }
-
-    .stats-card .stat {
-      padding: 10px 12px;
-      text-align: center;
-    }
-
-    .stats-card .stat strong {
-      font-size: clamp(20px, 6vw, 28px);
-    }
-
-    .stats-card .stat span {
-      font-size: 12px;
-    }
-
-    .countdown-card {
-      text-align: center;
-      padding: 14px 12px 16px;
-    }
-
-    .countdown-card .time {
-      font-size: clamp(20px, 7vw, 34px);
-      font-weight: 600;
-      letter-spacing: 0.4px;
-      margin: 4px 0 8px;
-    }
-
-    .countdown-card .time span {
-      font-size: 14px;
-      color: var(--muted);
-      margin-left: 6px;
-    }
-
-    .countdown-actions {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    #countdown-display {
-      font-size: clamp(16px, 5vw, 22px);
-      color: var(--ink);
-    }
-
-    .note {
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.5;
-      margin-top: 10px;
-    }
-
-    .formula {
-      font-size: 11px;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .formula strong {
-      color: var(--ink);
-      font-weight: 600;
-    }
-
-    .result {
-      font-size: 15px;
-      color: var(--accent);
-      margin-top: 6px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 0 16px 24px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes riseIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    header { padding: 24px 16px 8px; text-align: center; }
+    h1 { font-family: "Fraunces", serif; font-size: 28px; margin: 0 0 4px; }
+    header p { margin: 0; color: var(--muted); font-size: 11px; }
+    main { display: grid; gap: 8px; padding: 8px 10px 18px; width: min(94vw, 720px); margin: 0 auto; }
+    .card { background: var(--card); border: 1px solid var(--stroke); border-radius: 14px; padding: 12px; backdrop-filter: blur(10px); }
+    .section-title { font-weight: 600; font-size: 13px; margin: 0 0 6px; display: flex; align-items: center; gap: 8px; }
+    .pill { font-size: 10px; padding: 2px 8px; border-radius: 999px; background: rgba(88, 214, 200, 0.2); color: var(--accent2); }
+    .grid.row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; }
+    label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+    .label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    input, select { width: 100%; padding: 10px; border-radius: 12px; border: 1px solid transparent; background: rgba(255, 255, 255, 0.12); color: var(--ink); font-size: 14px; outline: none; }
+    button { border: none; border-radius: 999px; padding: 8px 16px; font-weight: 600; cursor: pointer; background: var(--accent); color: #1a1202; }
+    .lock-toggle { background: rgba(88, 214, 200, 0.2); color: var(--accent2); font-size: 12px; padding: 4px 10px; }
+    .time { font-size: 34px; font-weight: 600; margin: 4px 0 8px; text-align: center; color: var(--accent); }
+    .note { color: var(--muted); font-size: 11px; line-height: 1.5; margin-top: 10px; }
+    .formula { border-top: 1px solid var(--stroke); padding-top: 10px; margin-top: 15px; }
+    #scene-ev { font-size: 24px; color: var(--accent2); }
   </style>
 </head>
 <body>
@@ -319,97 +57,70 @@
   </header>
 
   <main>
-    <section class="card stats-card compact-card">
-      <div class="stats">
-        <div class="stat">
-          <span>EV (含 ND)</span>
-          <strong id="scene-ev">--</strong>
-        </div>
+    <section class="card">
+      <div class="section-title">環境亮度 <span class="pill">Scene EV</span></div>
+      <div style="text-align: center; padding: 10px 0;">
+        <span style="font-size: 12px; color: var(--muted);">環境 EV (不含 ND)</span><br/>
+        <strong id="scene-ev">--</strong>
       </div>
     </section>
 
-    <section class="card compact-card">
+    <section class="card">
       <div class="section-title">基準參數 <span class="pill">Base</span></div>
       <div class="grid row">
-        <div>
-          <label for="base-aperture">光圈 (f)</label>
-          <select id="base-aperture"></select>
-        </div>
-        <div>
-          <label for="base-shutter">快門</label>
-          <select id="base-shutter"></select>
-        </div>
-        <div>
-          <label for="base-iso">ISO</label>
-          <select id="base-iso"></select>
-        </div>
-        <div>
-          <label for="base-nd">ND 濾鏡 (檔)</label>
-          <select id="base-nd"></select>
-        </div>
+        <div><label>光圈 (f)</label><select id="base-aperture"></select></div>
+        <div><label>快門</label><select id="base-shutter"></select></div>
+        <div><label>ISO</label><select id="base-iso"></select></div>
+        <div><label>ND 檔數</label><select id="base-nd"></select></div>
       </div>
-      <div class="note">提示：基準值是你目前的設定。若要加入 ND 濾鏡，請在下面「目標」區塊輸入 ND 檔數。</div>
-      <div class="note formula">
-        <strong>計算公式</strong><br />
-        EV100 = log2(N² / t) - log2(ISO / 100)<br />
-        場景 EV100 = EV100 + ND(檔)<br />
-        有效 EV100 = 場景 EV100 - ND(檔)<br />
-        t = N² / 2^(有效 EV100 + log2(ISO / 100))
-      </div>
+      <div class="note">提示：基準值為當前實測或環境設定。</div>
     </section>
 
-    <section class="card compact-card">
+    <section class="card">
       <div class="section-title">目標參數 <span class="pill">Target</span></div>
       <div class="grid row">
         <div>
-          <div class="label-row">
-            <label for="target-nd">ND 濾鏡 (檔)</label>
-            <button class="lock-toggle" type="button" data-lock="target-nd">解鎖</button>
-          </div>
+          <div class="label-row"><label>ND (檔)</label><button class="lock-toggle" type="button" data-lock="target-nd">解鎖</button></div>
           <select id="target-nd"></select>
         </div>
         <div>
-          <div class="label-row">
-            <label for="target-aperture">光圈 (f)</label>
-            <button class="lock-toggle" type="button" data-lock="target-aperture">解鎖</button>
-          </div>
+          <div class="label-row"><label>光圈 (f)</label><button class="lock-toggle" type="button" data-lock="target-aperture">解鎖</button></div>
           <select id="target-aperture"></select>
         </div>
         <div>
-          <div class="label-row">
-            <label for="target-iso">ISO</label>
-            <button class="lock-toggle" type="button" data-lock="target-iso">解鎖</button>
-          </div>
+          <div class="label-row"><label>ISO</label><button class="lock-toggle" type="button" data-lock="target-iso">解鎖</button></div>
           <select id="target-iso"></select>
         </div>
       </div>
-      <div class="note" id="result-note">依據上方基準 EV 計算，ISO 或光圈其一維持基準設定。</div>
+      <div class="note" id="result-note">請檢查參數以顯示結果。</div>
     </section>
 
-    <section class="card countdown-card compact-card">
-      <div class="section-title">拍照倒數 <span class="pill">Timer</span></div>
-      <div class="time"><strong id="base-time">--</strong><span>sec</span></div>
-      <div class="countdown-actions">
-        <button id="countdown-btn" type="button">開始倒數</button>
-        <span>剩餘</span>
-        <strong id="countdown-display">--</strong>
+    <section class="card" style="text-align: center;">
+      <div class="section-title">計算快門 <span class="pill">Result</span></div>
+      <div class="time"><strong id="base-time">--</strong></div>
+      <div style="color: var(--muted); font-size: 12px; margin-bottom: 10px;">
+        剩餘倒數：<strong id="countdown-display" style="color: var(--ink)">--</strong>
+      </div>
+      <button id="countdown-btn" type="button" style="width: 100%;">開始倒數</button>
+      
+      <div class="note formula">
+        <strong>曝光計算公式</strong><br />
+        EV₁₀₀ = log₂(N²/t) - log₂(ISO/100)<br />
+        環境 EV = EV₁₀₀ + ND<sub>base</sub><br />
+        目標快門 t = N² / (2<sup>(環境 EV - ND<sub>target</sub>)</sup> × (ISO/100))
       </div>
     </section>
   </main>
-
-  <footer>支援手機瀏覽。數值僅供參考，實拍時請依環境調整。</footer>
 
   <script>
     const baseAperture = document.getElementById("base-aperture");
     const baseShutter = document.getElementById("base-shutter");
     const baseIso = document.getElementById("base-iso");
     const baseNd = document.getElementById("base-nd");
-
     const targetAperture = document.getElementById("target-aperture");
     const targetIso = document.getElementById("target-iso");
     const targetNd = document.getElementById("target-nd");
     const lockButtons = document.querySelectorAll("[data-lock]");
-
     const sceneEvEl = document.getElementById("scene-ev");
     const baseTimeEl = document.getElementById("base-time");
     const countdownBtn = document.getElementById("countdown-btn");
@@ -418,266 +129,105 @@
 
     const commonDenominators = [1, 2, 4, 8, 15, 30, 60, 125, 250, 500, 1000, 2000, 4000, 8000];
     const apertureOptions = [1.0, 1.4, 2, 2.8, 4, 5.6, 8, 11, 16, 22, 32];
-    const isoOptions = [50, 100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200, 102400];
-    const ndOptions = [0, 0.3, 0.6, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const isoOptions = [50, 100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600];
+    const ndOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 15, 20];
     const shutterOptions = [
-      { label: "30s", value: 30 },
-      { label: "15s", value: 15 },
-      { label: "8s", value: 8 },
-      { label: "4s", value: 4 },
-      { label: "2s", value: 2 },
-      { label: "1s", value: 1 },
-      { label: "1/2", value: 0.5 },
-      { label: "1/4", value: 0.25 },
-      { label: "1/8", value: 0.125 },
-      { label: "1/15", value: 1 / 15 },
-      { label: "1/30", value: 1 / 30 },
-      { label: "1/60", value: 1 / 60 },
-      { label: "1/125", value: 1 / 125 },
-      { label: "1/250", value: 1 / 250 },
-      { label: "1/500", value: 1 / 500 },
-      { label: "1/1000", value: 1 / 1000 },
-      { label: "1/2000", value: 1 / 2000 },
-      { label: "1/4000", value: 1 / 4000 },
-      { label: "1/8000", value: 1 / 8000 }
+      { label: "30s", value: 30 }, { label: "15s", value: 15 }, { label: "8s", value: 8 }, 
+      { label: "4s", value: 4 }, { label: "2s", value: 2 }, { label: "1s", value: 1 },
+      { label: "1/2", value: 0.5 }, { label: "1/4", value: 0.25 }, { label: "1/8", value: 0.125 },
+      { label: "1/15", value: 1/15 }, { label: "1/30", value: 1/30 }, { label: "1/60", value: 1/60 },
+      { label: "1/125", value: 1/125 }, { label: "1/250", value: 1/250 }, { label: "1/500", value: 1/500 }
     ];
 
-    function parseShutter(value) {
-      const num = Number(value);
-      return num > 0 ? num : NaN;
-    }
+    function log2(x) { return Math.log(x) / Math.log(2); }
 
     function formatShutter(seconds) {
       if (!isFinite(seconds) || seconds <= 0) return "--";
-      if (seconds >= 60) {
-        const minutes = seconds / 60;
-        if (minutes >= 60) {
-          const hours = minutes / 60;
-          return `${hours.toFixed(2)} 小時 (${seconds.toFixed(1)}s)`;
-        }
-        return `${minutes.toFixed(2)} 分鐘 (${seconds.toFixed(1)}s)`;
-      }
       if (seconds >= 1) return `${seconds.toFixed(2)}s`;
-      let best = commonDenominators[0];
-      let bestErr = Math.abs(seconds - 1 / best);
-      for (const denom of commonDenominators) {
-        const err = Math.abs(seconds - 1 / denom);
-        if (err < bestErr) {
-          best = denom;
-          bestErr = err;
-        }
+      let best = commonDenominators[0], bestErr = Math.abs(seconds - 1 / best);
+      for (const d of commonDenominators) {
+        const err = Math.abs(seconds - 1 / d);
+        if (err < bestErr) { best = d; bestErr = err; }
       }
-      return `1/${best} s (${seconds.toFixed(4)}s)`;
-    }
-
-    function log2(x) {
-      return Math.log(x) / Math.log(2);
+      return `1/${best}s`;
     }
 
     function populateOptions() {
-      function addOptions(select, options, formatter) {
-        select.innerHTML = "";
-        options.forEach((option) => {
+      const add = (el, opts, fmt) => {
+        opts.forEach(o => {
           const opt = document.createElement("option");
-          if (typeof option === "object") {
-            opt.value = String(option.value);
-            opt.textContent = option.label;
-          } else {
-            opt.value = String(option);
-            opt.textContent = formatter ? formatter(option) : String(option);
-          }
-          select.appendChild(opt);
+          opt.value = o.value !== undefined ? o.value : o;
+          opt.textContent = o.label !== undefined ? o.label : (fmt ? fmt(o) : o);
+          el.appendChild(opt);
         });
-      }
+      };
+      add(baseAperture, apertureOptions, v => `f/${v}`);
+      add(targetAperture, apertureOptions, v => `f/${v}`);
+      add(baseIso, isoOptions);
+      add(targetIso, isoOptions);
+      add(baseNd, ndOptions, v => v === 0 ? "0 (無)" : `${v} 檔`);
+      add(targetNd, ndOptions, v => v === 0 ? "0 (無)" : `${v} 檔`);
+      add(baseShutter, shutterOptions);
 
-      addOptions(baseAperture, apertureOptions, (value) => `f/${value}`);
-      addOptions(targetAperture, apertureOptions, (value) => `f/${value}`);
-      addOptions(baseIso, isoOptions);
-      addOptions(targetIso, isoOptions);
-      addOptions(baseNd, ndOptions, (value) => {
-        if (value === 0) return "0 (無)";
-        if (Number.isInteger(value)) return `${value} 檔 (ND${Math.pow(2, value)})`;
-        return `${value} 檔`;
-      });
-      addOptions(targetNd, ndOptions, (value) => {
-        if (value === 0) return "0 (無)";
-        if (Number.isInteger(value)) return `${value} 檔 (ND${Math.pow(2, value)})`;
-        return `${value} 檔`;
-      });
-      addOptions(baseShutter, shutterOptions);
-
-      baseAperture.value = "8";
-      targetAperture.value = "8";
-      baseIso.value = "100";
-      targetIso.value = "100";
-      baseNd.value = "0";
-      targetNd.value = "0";
-      baseShutter.value = String(1 / 125);
+      baseAperture.value = "16"; baseShutter.value = "15"; baseIso.value = "100";
     }
 
-    let countdownTimer = null;
-    let countdownEnd = 0;
-    let countdownSeconds = NaN;
+    function render() {
+      const N1 = Number(baseAperture.value), t1 = Number(baseShutter.value);
+      const I1 = Number(baseIso.value), ND1 = Number(baseNd.value);
+      const N2 = Number(targetAperture.value), I2 = Number(targetIso.value), ND2 = Number(targetNd.value);
 
-    function stopCountdown(message) {
-      if (countdownTimer) {
-        clearInterval(countdownTimer);
-        countdownTimer = null;
-      }
-      countdownBtn.textContent = "開始倒數";
-      countdownDisplay.textContent = message || "--";
-    }
-
-    function startCountdown() {
-      const seconds = countdownSeconds;
-      if (!isFinite(seconds) || seconds <= 0) {
-        stopCountdown("--");
-        return;
-      }
-      if (countdownTimer) {
-        stopCountdown("--");
-        return;
-      }
-      countdownEnd = Date.now() + seconds * 1000;
-      countdownBtn.textContent = "停止";
-      countdownTimer = setInterval(() => {
-        const remaining = (countdownEnd - Date.now()) / 1000;
-        if (remaining <= 0) {
-          stopCountdown("完成");
-          return;
-        }
-        countdownDisplay.textContent = `${remaining.toFixed(1)}s`;
-      }, 100);
-    }
-
-  function computeSceneEv() {
-      const N = Number(baseAperture.value);
-      const t = parseShutter(baseShutter.value);
-      const iso = Number(baseIso.value);
-      const nd = Number(baseNd.value) || 0;
-
-      if (!isFinite(N) || !isFinite(t) || !isFinite(iso) || N <= 0 || t <= 0 || iso <= 0) {
-          return { sceneEv: NaN };
-      }
-
-      // 計算當前設定下的有效 EV (包含濾鏡影響後的結果)
-      const effectiveEv = log2((N * N) / t) - log2(iso / 100);
-      
-      // 環境真正的亮度 (Scene EV) = 有效 EV + 濾鏡扣掉的檔數
-      // 例如：濾鏡扣了 3 檔，相機算出來是 EV 5，那環境其實是 EV 8
-      const sceneEv = effectiveEv + nd; 
-      return { sceneEv };
-  }
-
-  function computeTargetShutter(sceneEv, aperture, iso, targetNd) {
-      if (!isFinite(sceneEv) || !isFinite(aperture) || !isFinite(iso)) return NaN;
-
-      // 到達感光元件的有效亮度 = 環境光 - 減光鏡檔數
-      const effectiveEv = sceneEv - targetNd;
-
-      // 根據公式 t = N^2 / (2^EV * (ISO/100))
-      const shutter = (aperture * aperture) / (Math.pow(2, effectiveEv) * (iso / 100));
-      return shutter;
-  }
-
-  function render() {
-      const { sceneEv } = computeSceneEv();
-      
-      // 更新顯示：環境 EV (不含 ND)
+      // 計算環境真實 EV
+      const ev100 = log2((N1 * N1) / t1) - log2(I1 / 100);
+      const sceneEv = ev100 + ND1;
       sceneEvEl.textContent = isFinite(sceneEv) ? sceneEv.toFixed(2) : "--";
 
-      const baseIsoVal = Number(baseIso.value);
-      const baseApertureVal = Number(baseAperture.value);
-      const baseNdVal = Number(baseNd.value) || 0;
-
-      const targetIsoVal = Number(targetIso.value);
-      const targetApertureVal = Number(targetAperture.value);
-      const targetNdVal = Number(targetNd.value) || 0;
-
       // 計算目標快門
-      const shutterTarget = computeTargetShutter(sceneEv, targetApertureVal, targetIsoVal, targetNdVal);
-      
-      countdownSeconds = shutterTarget;
-      baseTimeEl.textContent = isFinite(shutterTarget) ? formatShutter(shutterTarget) : "--";
+      const t2 = (N2 * N2) / (Math.pow(2, sceneEv - ND2) * (I2 / 100));
+      baseTimeEl.textContent = formatShutter(t2);
+      countdownSeconds = t2;
 
-      if (!isFinite(sceneEv)) {
-          resultNoteEl.textContent = "請檢查基準參數是否正確。";
-      } else {
-          // --- 新增：計算各項參數的檔數變化 ---
-          
-          // ISO 變化 (1 檔 = 2倍)
-          const isoStops = log2(targetIsoVal / baseIsoVal);
-          
-          // 光圈變化 (1 檔 = 1.414倍，公式為 2 * log2(f_target / f_base))
-          // 數值增加（f/8 -> f/11）代表檔數為正，進光減少
-          const apertureStops = 2 * log2(targetApertureVal / baseApertureVal);
-          
-          // ND 變化 (直接相減)
-          const ndStops = targetNdVal - baseNdVal;
+      // 檔數描述
+      const apS = 2 * log2(N2 / N1), isoS = log2(I2 / I1), ndS = ND2 - ND1;
+      const fmt = v => (Math.abs(v) < 0.01 ? "無變動" : `${v > 0 ? '+' : ''}${v.toFixed(1)} 檔`);
+      resultNoteEl.innerHTML = `相較基準：光圈 ${fmt(apS)}、ISO ${fmt(isoS)}、ND ${fmt(ndS)}`;
+    }
 
-          // 格式化字串：如果是 0 則顯示 "無變動"，否則顯示 +X 或 -X
-          const formatStop = (val, unit) => {
-              if (Math.abs(val) < 0.01) return `無變動`;
-              return `${val > 0 ? '+' : ''}${val.toFixed(1)} 檔`;
-          };
-
-          resultNoteEl.innerHTML = `
-              環境亮度鎖定為 <strong>EV ${sceneEv.toFixed(1)}</strong><br/>
-              相較基準值：光圈 ${formatStop(apertureStops)}、
-              ISO ${formatStop(isoStops)}、
-              ND ${formatStop(ndStops)}
-          `;
-      }
-  }
-
-
-
-    function syncTargetLocked() {
-      lockButtons.forEach((button) => {
-        const targetId = button.dataset.lock;
-        const target = document.getElementById(targetId);
-        if (!target) return;
-        const locked = button.dataset.locked !== "false";
+    // 鎖定功能
+    function syncLocks() {
+      lockButtons.forEach(btn => {
+        const target = document.getElementById(btn.dataset.lock);
+        const locked = btn.dataset.locked !== "false";
         target.disabled = locked;
-        button.textContent = locked ? "解鎖" : "鎖定";
+        btn.textContent = locked ? "解鎖" : "鎖定";
         if (locked) {
-          if (targetId === "target-aperture") target.value = baseAperture.value;
-          if (targetId === "target-iso") target.value = baseIso.value;
-          if (targetId === "target-nd") target.value = baseNd.value;
+          if (target.id.includes("aperture")) target.value = baseAperture.value;
+          if (target.id.includes("iso")) target.value = baseIso.value;
+          if (target.id.includes("nd")) target.value = baseNd.value;
         }
       });
     }
 
+    // 倒數計時功能
+    let timer = null;
+    countdownBtn.onclick = () => {
+      if (timer) { clearInterval(timer); timer = null; countdownBtn.textContent = "開始倒數"; return; }
+      let rem = countdownSeconds;
+      if (!rem || rem <= 0) return;
+      countdownBtn.textContent = "停止";
+      timer = setInterval(() => {
+        rem -= 0.1;
+        if (rem <= 0) { clearInterval(timer); timer = null; countdownDisplay.textContent = "完成"; countdownBtn.textContent = "開始倒數"; return; }
+        countdownDisplay.textContent = `${rem.toFixed(1)}s`;
+      }, 100);
+    };
 
-    const inputs = [
-      baseAperture, baseShutter, baseIso, baseNd,
-      targetAperture, targetIso, targetNd
-    ];
+    [...inputs, targetAperture, targetIso, targetNd].forEach(i => i.onchange = () => { syncLocks(); render(); });
+    lockButtons.forEach(b => b.onclick = () => { b.dataset.locked = b.dataset.locked === "false" ? "true" : "false"; syncLocks(); render(); });
 
-    inputs.forEach((input) => {
-      input.addEventListener("input", () => {
-        syncTargetLocked();
-        if (countdownTimer) stopCountdown("--");
-        render();
-      });
-    });
-
-    lockButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        button.dataset.locked = button.dataset.locked === "false" ? "true" : "false";
-        syncTargetLocked();
-        if (countdownTimer) stopCountdown("--");
-        render();
-      });
-    });
-
-    countdownBtn.addEventListener("click", startCountdown);
     populateOptions();
-    syncTargetLocked();
+    syncLocks();
     render();
   </script>
 </body>
 </html>
-
-
-
