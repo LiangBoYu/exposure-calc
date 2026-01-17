@@ -71,6 +71,20 @@
       backdrop-filter: blur(10px);
     }
 
+    .card.active-mode {
+      border-color: rgba(88, 214, 200, 0.8);
+      box-shadow: 0 12px 30px rgba(88, 214, 200, 0.25);
+    }
+
+    .card.active-mode .section-title {
+      color: #7be7da;
+    }
+
+    .card.active-mode .section-title .pill {
+      background: rgba(123, 231, 218, 0.28);
+      color: #0c1b24;
+    }
+
     .compact-card {
       padding: 10px;
     }
@@ -91,6 +105,23 @@
       border-radius: 999px;
       background: rgba(88, 214, 200, 0.2);
       color: var(--accent2);
+    }
+
+    .mode-toggle {
+      margin-left: auto;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--muted);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+    }
+
+    .mode-toggle.active {
+      background: rgba(88, 214, 200, 0.2);
+      color: var(--accent2);
+      border-color: rgba(88, 214, 200, 0.5);
     }
 
     .grid {
@@ -186,6 +217,81 @@
       padding: 4px 10px;
     }
 
+    .solve-active {
+      border-radius: 12px;
+      outline: 1px solid rgba(88, 214, 200, 0.6);
+      box-shadow: 0 0 0 2px rgba(88, 214, 200, 0.2);
+    }
+
+    .field-highlight .wheel {
+      border-color: rgba(241, 162, 8, 0.7);
+      background: rgba(241, 162, 8, 0.18);
+    }
+
+    .field-highlight .wheel-item.is-selected {
+      color: #ffd17a;
+    }
+
+    .wheel-select {
+      display: none;
+    }
+
+    .wheel {
+      height: 128px;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+      padding: 26px 0;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid transparent;
+      position: relative;
+    }
+
+    .wheel.collapsed {
+      height: 36px;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .wheel.collapsed::before,
+    .wheel.collapsed::after {
+      height: 0;
+    }
+
+    .wheel::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    .wheel::before,
+    .wheel::after {
+      content: "";
+      display: block;
+      height: calc(50% - 16px);
+    }
+
+    .wheel-item {
+      scroll-snap-align: center;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 12px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .wheel-item.is-selected {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .wheel.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
     .countdown {
       display: flex;
       align-items: center;
@@ -244,7 +350,7 @@
     }
 
     .countdown-card .time {
-      font-size: clamp(20px, 7vw, 34px);
+      font-size: clamp(20px, 6.5vw, 36px);
       font-weight: 600;
       letter-spacing: 0.4px;
       margin: 4px 0 8px;
@@ -266,8 +372,12 @@
     }
 
     #countdown-display {
-      font-size: clamp(16px, 5vw, 22px);
+      font-size: clamp(18px, 6vw, 26px);
       color: var(--ink);
+    }
+
+    #countdown-display.alert {
+      color: #ff6b6b;
     }
 
     .note {
@@ -294,6 +404,12 @@
       margin-top: 6px;
     }
 
+    .warning {
+      color: #ffb347;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
     footer {
       text-align: center;
       padding: 0 16px 24px;
@@ -315,7 +431,7 @@
 <body>
   <header>
     <h1>曝光計算器</h1>
-    <p>EV / ISO / 快門 / 光圈 / ND 濾鏡 — 專為長曝與手機使用設計</p>
+    <p>EV / ISO 光圈 / 快門 / ND 濾鏡 — 專為長曝與手機使用設計<br />支援手機瀏覽。數值僅供參考，實拍時請依環境調整。</p>
   </header>
 
   <main>
@@ -332,20 +448,24 @@
       <div class="section-title">基準參數 <span class="pill">Base</span></div>
       <div class="grid row">
         <div>
+          <label for="base-iso">ISO</label>
+          <select id="base-iso" class="wheel-select"></select>
+          <div class="wheel" data-wheel="base-iso"></div>
+        </div>
+        <div>
           <label for="base-aperture">光圈 (f)</label>
-          <select id="base-aperture"></select>
+          <select id="base-aperture" class="wheel-select"></select>
+          <div class="wheel" data-wheel="base-aperture"></div>
         </div>
         <div>
           <label for="base-shutter">快門</label>
-          <select id="base-shutter"></select>
-        </div>
-        <div>
-          <label for="base-iso">ISO</label>
-          <select id="base-iso"></select>
+          <select id="base-shutter" class="wheel-select"></select>
+          <div class="wheel" data-wheel="base-shutter"></div>
         </div>
         <div>
           <label for="base-nd">ND 濾鏡 (檔)</label>
-          <select id="base-nd"></select>
+          <select id="base-nd" class="wheel-select"></select>
+          <div class="wheel" data-wheel="base-nd"></div>
         </div>
       </div>
       <div class="note">提示：基準值是你目前的設定。若要加入 ND 濾鏡，請在下面「目標」區塊輸入 ND 檔數。</div>
@@ -358,32 +478,91 @@
       </div>
     </section>
 
-    <section class="card compact-card">
-      <div class="section-title">目標參數 <span class="pill">Target</span></div>
+    <section class="card compact-card" id="target-section">
+      <div class="section-title">
+        目標參數 <span class="pill">Target</span>
+        <button class="mode-toggle" type="button" data-mode="target">使用倒數</button>
+      </div>
       <div class="grid row">
-        <div>
-          <div class="label-row">
-            <label for="target-nd">ND 濾鏡 (檔)</label>
-            <button class="lock-toggle" type="button" data-lock="target-nd">解鎖</button>
-          </div>
-          <select id="target-nd"></select>
-        </div>
-        <div>
-          <div class="label-row">
-            <label for="target-aperture">光圈 (f)</label>
-            <button class="lock-toggle" type="button" data-lock="target-aperture">解鎖</button>
-          </div>
-          <select id="target-aperture"></select>
-        </div>
-        <div>
+        <div class="target-field" data-target-field="target-iso">
           <div class="label-row">
             <label for="target-iso">ISO</label>
             <button class="lock-toggle" type="button" data-lock="target-iso">解鎖</button>
           </div>
-          <select id="target-iso"></select>
+          <select id="target-iso" class="wheel-select"></select>
+          <div class="wheel" data-wheel="target-iso"></div>
+        </div>
+        <div class="target-field" data-target-field="target-aperture">
+          <div class="label-row">
+            <label for="target-aperture">光圈 (f)</label>
+            <button class="lock-toggle" type="button" data-lock="target-aperture">解鎖</button>
+          </div>
+          <select id="target-aperture" class="wheel-select"></select>
+          <div class="wheel" data-wheel="target-aperture"></div>
+        </div>
+        <div class="target-field" data-target-field="target-nd">
+          <div class="label-row">
+            <label for="target-nd">ND 濾鏡 (檔)</label>
+            <button class="lock-toggle" type="button" data-lock="target-nd">解鎖</button>
+          </div>
+          <select id="target-nd" class="wheel-select"></select>
+          <div class="wheel" data-wheel="target-nd"></div>
         </div>
       </div>
       <div class="note" id="result-note">依據上方基準 EV 計算，ISO 或光圈其一維持基準設定。</div>
+    </section>
+
+    <section class="card compact-card" id="solve-section">
+      <div class="section-title">
+        求參數 <span class="pill">Solve</span>
+        <button class="mode-toggle" type="button" data-mode="solve">使用倒數</button>
+      </div>
+      <div class="grid row">
+        <div>
+          <label for="solve-param">想改的參數</label>
+          <select id="solve-param">
+            <option value="shutter">快門</option>
+            <option value="aperture">光圈</option>
+            <option value="iso">ISO</option>
+            <option value="nd">ND</option>
+          </select>
+        </div>
+        <div class="solve-field" data-solve-field="solve-iso">
+          <div class="label-row">
+            <label for="solve-iso">ISO</label>
+            <button class="lock-toggle" type="button" data-solve-lock="solve-iso">解鎖</button>
+          </div>
+          <select id="solve-iso" class="wheel-select"></select>
+          <div class="wheel" data-wheel="solve-iso"></div>
+        </div>
+        <div class="solve-field" data-solve-field="solve-aperture">
+          <div class="label-row">
+            <label for="solve-aperture">光圈 (f)</label>
+            <button class="lock-toggle" type="button" data-solve-lock="solve-aperture">解鎖</button>
+          </div>
+          <select id="solve-aperture" class="wheel-select"></select>
+          <div class="wheel" data-wheel="solve-aperture"></div>
+        </div>
+        <div class="solve-field" data-solve-field="solve-shutter">
+          <div class="label-row">
+            <label for="solve-shutter">快門</label>
+            <button class="lock-toggle" type="button" data-solve-lock="solve-shutter">解鎖</button>
+          </div>
+          <select id="solve-shutter" class="wheel-select"></select>
+          <div class="wheel" data-wheel="solve-shutter"></div>
+        </div>
+        <div class="solve-field" data-solve-field="solve-nd">
+          <div class="label-row">
+            <label for="solve-nd">ND 濾鏡 (檔)</label>
+            <button class="lock-toggle" type="button" data-solve-lock="solve-nd">解鎖</button>
+          </div>
+          <select id="solve-nd" class="wheel-select"></select>
+          <div class="wheel" data-wheel="solve-nd"></div>
+        </div>
+      </div>
+      <div class="note" id="solve-desc">固定 ISO / 光圈 / ND 兩項後，系統會告訴你該改哪個參數。</div>
+      <div class="result" id="solve-result">--</div>
+      <div class="warning" id="solve-warning"></div>
     </section>
 
     <section class="card countdown-card compact-card">
@@ -397,7 +576,7 @@
     </section>
   </main>
 
-  <footer>支援手機瀏覽。數值僅供參考，實拍時請依環境調整。</footer>
+  <footer>Designed by Liang Bo-Yu</footer>
 
   <script>
     const baseAperture = document.getElementById("base-aperture");
@@ -415,6 +594,24 @@
     const countdownBtn = document.getElementById("countdown-btn");
     const countdownDisplay = document.getElementById("countdown-display");
     const resultNoteEl = document.getElementById("result-note");
+    const solveParam = document.getElementById("solve-param");
+    const solveShutter = document.getElementById("solve-shutter");
+    const solveAperture = document.getElementById("solve-aperture");
+    const solveIso = document.getElementById("solve-iso");
+    const solveNd = document.getElementById("solve-nd");
+    const solveDesc = document.getElementById("solve-desc");
+    const solveResult = document.getElementById("solve-result");
+    const solveWarning = document.getElementById("solve-warning");
+    const solveLockButtons = document.querySelectorAll("[data-solve-lock]");
+    const solveFields = document.querySelectorAll("[data-solve-field]");
+    const targetFields = document.querySelectorAll("[data-target-field]");
+    const targetSection = document.getElementById("target-section");
+    const solveSection = document.getElementById("solve-section");
+    const modeToggles = document.querySelectorAll("[data-mode]");
+
+    const wheelMap = new Map();
+    let countdownMode = "base";
+    let solveSuggestedShutter = NaN;
 
     const commonDenominators = [1, 2, 4, 8, 15, 30, 60, 125, 250, 500, 1000, 2000, 4000, 8000];
     const apertureOptions = [1.0, 1.4, 2, 2.8, 4, 5.6, 8, 11, 16, 22, 32];
@@ -505,6 +702,7 @@
         return `${value} 檔`;
       });
       addOptions(baseShutter, shutterOptions);
+      addOptions(solveShutter, shutterOptions);
 
       baseAperture.value = "8";
       targetAperture.value = "8";
@@ -513,6 +711,29 @@
       baseNd.value = "0";
       targetNd.value = "0";
       baseShutter.value = String(1 / 125);
+      solveShutter.value = String(1 / 125);
+
+      addOptions(solveAperture, apertureOptions, (value) => `f/${value}`);
+      addOptions(solveIso, isoOptions);
+      addOptions(solveNd, ndOptions, (value) => {
+        if (value === 0) return "0 (無)";
+        if (Number.isInteger(value)) return `${value} 檔 (ND${Math.pow(2, value)})`;
+        return `${value} 檔`;
+      });
+      solveAperture.value = "8";
+      solveIso.value = "100";
+      solveNd.value = "0";
+      initWheel(baseIso);
+      initWheel(baseAperture);
+      initWheel(baseShutter);
+      initWheel(baseNd);
+      initWheel(targetIso);
+      initWheel(targetAperture);
+      initWheel(targetNd);
+      initWheel(solveIso);
+      initWheel(solveAperture);
+      initWheel(solveShutter);
+      initWheel(solveNd);
     }
 
     let countdownTimer = null;
@@ -526,6 +747,7 @@
       }
       countdownBtn.textContent = "開始倒數";
       countdownDisplay.textContent = message || "--";
+      countdownDisplay.classList.remove("alert");
     }
 
     function startCountdown() {
@@ -546,6 +768,7 @@
           stopCountdown("完成");
           return;
         }
+        countdownDisplay.classList.toggle("alert", remaining <= 10);
         countdownDisplay.textContent = `${remaining.toFixed(1)}s`;
       }, 100);
     }
@@ -580,8 +803,214 @@
       return shutter;
   }
 
+  function computeApertureFromShutter(sceneEv, shutter, iso, targetNd) {
+      if (!isFinite(sceneEv) || !isFinite(shutter) || !isFinite(iso)) return NaN;
+      const effectiveEv = sceneEv - targetNd;
+      return Math.sqrt(shutter * Math.pow(2, effectiveEv) * (iso / 100));
+  }
+
+  function computeIsoFromShutter(sceneEv, shutter, aperture, targetNd) {
+      if (!isFinite(sceneEv) || !isFinite(shutter) || !isFinite(aperture)) return NaN;
+      const effectiveEv = sceneEv - targetNd;
+      return 100 * (aperture * aperture) / (shutter * Math.pow(2, effectiveEv));
+  }
+
+  function computeNdFromShutter(sceneEv, shutter, aperture, iso) {
+      if (!isFinite(sceneEv) || !isFinite(shutter) || !isFinite(aperture) || !isFinite(iso)) return NaN;
+      return sceneEv - (log2((aperture * aperture) / shutter) - log2(iso / 100));
+  }
+
+  function formatNdLabel(nd) {
+      if (!isFinite(nd)) return "--";
+      const rounded = Math.round(nd * 10) / 10;
+      const isInt = Math.abs(rounded - Math.round(rounded)) < 0.05;
+      if (isInt) {
+          const stops = Math.round(rounded);
+          return `${stops} 檔 (ND${Math.pow(2, stops)})`;
+      }
+      return `${rounded} 檔`;
+  }
+
+  function nearestOption(options, value) {
+      let best = options[0];
+      let bestErr = Math.abs(value - best);
+      options.forEach((option) => {
+          const err = Math.abs(value - option);
+          if (err < bestErr) {
+              best = option;
+              bestErr = err;
+          }
+      });
+      return best;
+  }
+
+  function nearestShutterValue(value) {
+      let best = shutterOptions[0].value;
+      let bestErr = Math.abs(value - best);
+      shutterOptions.forEach((option) => {
+          const err = Math.abs(value - option.value);
+          if (err < bestErr) {
+              best = option.value;
+              bestErr = err;
+          }
+      });
+      return best;
+  }
+
+  function initWheel(selectEl) {
+      const wheelEl = document.querySelector(`[data-wheel="${selectEl.id}"]`);
+      if (!wheelEl) return;
+      wheelEl.innerHTML = "";
+      const items = [];
+      Array.from(selectEl.options).forEach((option) => {
+          const item = document.createElement("div");
+          item.className = "wheel-item";
+          item.dataset.value = option.value;
+          item.textContent = option.textContent;
+          wheelEl.appendChild(item);
+          items.push(item);
+      });
+      wheelMap.set(selectEl.id, { selectEl, wheelEl, items, isProgrammatic: false });
+
+      wheelEl.classList.add("collapsed");
+
+      wheelEl.addEventListener("click", (event) => {
+          if (wheelEl.classList.contains("collapsed")) {
+              setWheelExpanded(selectEl, true);
+              return;
+          }
+          const item = event.target.closest(".wheel-item");
+          if (!item) return;
+          setWheelValue(selectEl, item.dataset.value, true, true);
+          setWheelExpanded(selectEl, false);
+      });
+
+      let scrollTimer = null;
+      wheelEl.addEventListener("scroll", () => {
+          const map = wheelMap.get(selectEl.id);
+          if (!map || map.isProgrammatic) return;
+          clearTimeout(scrollTimer);
+          scrollTimer = setTimeout(() => {
+              const center = wheelEl.scrollTop + wheelEl.clientHeight / 2;
+              let bestItem = items[0];
+              let bestErr = Math.abs(center - (bestItem.offsetTop + bestItem.offsetHeight / 2));
+              items.forEach((candidate) => {
+                  const itemCenter = candidate.offsetTop + candidate.offsetHeight / 2;
+                  const err = Math.abs(center - itemCenter);
+                  if (err < bestErr) {
+                      bestItem = candidate;
+                      bestErr = err;
+                  }
+              });
+              setWheelValue(selectEl, bestItem.dataset.value, false, true);
+          }, 60);
+      });
+
+      setWheelValue(selectEl, selectEl.value, false, false);
+  }
+
+  function setWheelExpanded(selectEl, expanded) {
+      const map = wheelMap.get(selectEl.id);
+      if (!map) return;
+      const { wheelEl } = map;
+      document.querySelectorAll(".wheel").forEach((wheel) => {
+          if (wheel !== wheelEl) {
+              wheel.classList.add("collapsed");
+          }
+      });
+      wheelEl.classList.toggle("collapsed", !expanded);
+      if (expanded) {
+          setWheelValue(selectEl, selectEl.value, true, false);
+      }
+  }
+
+  function setWheelValue(selectEl, value, scrollIntoView, emitEvent) {
+      const map = wheelMap.get(selectEl.id);
+      if (!map) return;
+      const { wheelEl, items } = map;
+      const match = items.find((item) => item.dataset.value === String(value));
+      if (!match) return;
+      selectEl.value = String(value);
+      items.forEach((item) => item.classList.toggle("is-selected", item === match));
+      if (scrollIntoView) {
+          map.isProgrammatic = true;
+          wheelEl.scrollTop = match.offsetTop - (wheelEl.clientHeight - match.offsetHeight) / 2;
+          requestAnimationFrame(() => {
+              map.isProgrammatic = false;
+          });
+      }
+      if (emitEvent) {
+          selectEl.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+  }
+
+    function syncWheelDisabled(selectEl, disabled) {
+      const wheelEl = document.querySelector(`[data-wheel="${selectEl.id}"]`);
+      if (wheelEl) {
+        wheelEl.classList.toggle("disabled", disabled);
+        if (disabled) {
+          wheelEl.classList.add("collapsed");
+        }
+      }
+    }
+
+  function isLocked(targetId) {
+      const button = document.querySelector(`[data-lock="${targetId}"]`);
+      if (!button) return false;
+      return button.dataset.locked !== "false";
+  }
+
+  function syncSolveLocked(reset = false) {
+      const mode = solveParam.value;
+      const primaryMap = {
+          shutter: "solve-shutter",
+          aperture: "solve-aperture",
+          iso: "solve-iso",
+          nd: "solve-nd"
+      };
+      const primaryId = primaryMap[mode];
+
+      solveLockButtons.forEach((button) => {
+          const targetId = button.dataset.solveLock;
+          const target = document.getElementById(targetId);
+          if (!target) return;
+
+          const isPrimary = targetId === primaryId;
+          if (reset && !isPrimary) {
+              button.dataset.locked = "true";
+          }
+
+          if (isPrimary) {
+              button.dataset.locked = "false";
+              button.textContent = "選擇中";
+              button.disabled = true;
+              target.disabled = false;
+              syncWheelDisabled(target, false);
+          } else {
+              const locked = button.dataset.locked !== "false";
+              target.disabled = true;
+              button.textContent = locked ? "解鎖" : "求解中";
+              button.disabled = false;
+              syncWheelDisabled(target, true);
+              if (locked) {
+                  if (targetId === "solve-iso") target.value = targetIso.value;
+                  if (targetId === "solve-aperture") target.value = targetAperture.value;
+                  if (targetId === "solve-nd") target.value = targetNd.value;
+                  if (targetId === "solve-shutter") target.value = baseShutter.value;
+                  setWheelValue(target, target.value, true, false);
+              }
+          }
+      });
+
+      solveFields.forEach((field) => {
+          field.classList.toggle("solve-active", field.dataset.solveField === primaryId);
+      });
+  }
+
   function render() {
       const { sceneEv } = computeSceneEv();
+      const baseSeconds = parseShutter(baseShutter.value);
+      const baseValid = isFinite(baseSeconds) && baseSeconds > 0;
       
       // 更新顯示：環境 EV (不含 ND)
       sceneEvEl.textContent = isFinite(sceneEv) ? sceneEv.toFixed(2) : "--";
@@ -596,9 +1025,6 @@
 
       // 計算目標快門
       const shutterTarget = computeTargetShutter(sceneEv, targetApertureVal, targetIsoVal, targetNdVal);
-      
-      countdownSeconds = shutterTarget;
-      baseTimeEl.textContent = isFinite(shutterTarget) ? formatShutter(shutterTarget) : "--";
 
       if (!isFinite(sceneEv)) {
           resultNoteEl.textContent = "請檢查基準參數是否正確。";
@@ -628,8 +1054,215 @@
               ND ${formatStop(ndStops)}
           `;
       }
+      renderSolve(sceneEv);
+
+      const solveSeconds = isFinite(solveSuggestedShutter)
+          ? solveSuggestedShutter
+          : parseShutter(solveShutter.value);
+      const targetSeconds = shutterTarget;
+      const displaySeconds = countdownMode === "solve"
+          ? solveSeconds
+          : countdownMode === "target"
+              ? targetSeconds
+              : baseSeconds;
+      countdownSeconds = displaySeconds;
+      baseTimeEl.textContent = isFinite(displaySeconds) ? formatShutter(displaySeconds) : "--";
+      countdownBtn.disabled = !baseValid;
   }
 
+  function renderSolve(sceneEv) {
+      solveWarning.textContent = "";
+      solveSuggestedShutter = NaN;
+      if (!isFinite(sceneEv)) {
+          solveResult.textContent = "--";
+          solveDesc.textContent = "請先完成基準參數。";
+          return;
+      }
+
+      const mode = solveParam.value;
+      solveDesc.textContent = "固定 ISO / 光圈 / ND 兩項後，系統會告訴你該改哪個參數。";
+
+      const desiredShutter = parseShutter(solveShutter.value);
+      const desiredAperture = Number(solveAperture.value);
+      const desiredIso = Number(solveIso.value);
+      const desiredNd = Number(solveNd.value) || 0;
+
+      const unlockedCandidates = [];
+      solveLockButtons.forEach((button) => {
+          const targetId = button.dataset.solveLock;
+          if (targetId && targetId !== `solve-${mode}`) {
+              if (button.dataset.locked === "false") {
+                  unlockedCandidates.push(targetId);
+              }
+          }
+      });
+
+      if (unlockedCandidates.length === 0) {
+          solveFields.forEach((field) => field.classList.remove("field-highlight"));
+          solveResult.textContent = "請解鎖 ISO / 光圈 / ND 任一項。";
+          return;
+      }
+      if (unlockedCandidates.length > 1) {
+          solveFields.forEach((field) => field.classList.remove("field-highlight"));
+          solveResult.textContent = "請只解鎖一項參數來求解。";
+          return;
+      }
+
+      const unlocked = unlockedCandidates[0];
+      solveFields.forEach((field) => {
+          field.classList.toggle("field-highlight", field.dataset.solveField === unlocked);
+      });
+      const fixedIso = Number(solveIso.value);
+      const fixedAperture = Number(solveAperture.value);
+      const fixedNd = Number(solveNd.value) || 0;
+      const fixedShutter = parseShutter(solveShutter.value);
+
+      if (mode === "shutter") {
+          if (unlocked === "solve-nd") {
+              const nd = computeNdFromShutter(sceneEv, desiredShutter, fixedAperture, fixedIso);
+              if (nd < 0 || nd > 15) {
+                  solveWarning.textContent = "警告：ND 檔數超出常見範圍，請確認條件。";
+              }
+              const nearest = nearestOption(ndOptions, nd);
+              setWheelValue(solveNd, nearest, true, false);
+              solveResult.textContent = `建議 ND ${formatNdLabel(nd)}`;
+              if (countdownMode === "solve") {
+                  const nearestShutter = nearestShutterValue(desiredShutter);
+                  setWheelValue(solveShutter, nearestShutter, true, false);
+              }
+              return;
+          }
+          if (unlocked === "solve-iso") {
+              const iso = computeIsoFromShutter(sceneEv, desiredShutter, fixedAperture, fixedNd);
+              if (iso < 50 || iso > 102400) {
+                  solveWarning.textContent = "警告：ISO 超出常見範圍，請確認條件。";
+              }
+              const nearest = nearestOption(isoOptions, iso);
+              setWheelValue(solveIso, nearest, true, false);
+              solveResult.textContent = `建議 ISO ${Math.round(iso)}`;
+              if (countdownMode === "solve") {
+                  const nearestShutter = nearestShutterValue(desiredShutter);
+                  setWheelValue(solveShutter, nearestShutter, true, false);
+              }
+              return;
+          }
+          if (unlocked === "solve-aperture") {
+              const aperture = computeApertureFromShutter(sceneEv, desiredShutter, fixedIso, fixedNd);
+              if (aperture < 0.7 || aperture > 64) {
+                  solveWarning.textContent = "警告：光圈超出常見範圍，請確認條件。";
+              }
+              const nearest = nearestOption(apertureOptions, aperture);
+              setWheelValue(solveAperture, nearest, true, false);
+              solveResult.textContent = `建議光圈 f/${aperture.toFixed(2)}`;
+              if (countdownMode === "solve") {
+                  const nearestShutter = nearestShutterValue(desiredShutter);
+                  setWheelValue(solveShutter, nearestShutter, true, false);
+              }
+              return;
+          }
+      }
+
+      if (mode === "aperture") {
+          if (unlocked === "solve-shutter") {
+              const shutter = computeTargetShutter(sceneEv, desiredAperture, fixedIso, fixedNd);
+              if (shutter < 1 / 8000 || shutter > 1800) {
+                  solveWarning.textContent = "警告：快門時間超出常見範圍，請確認條件。";
+              }
+              const nearest = nearestShutterValue(shutter);
+              setWheelValue(solveShutter, nearest, true, false);
+              solveSuggestedShutter = shutter;
+              solveResult.textContent = `建議快門 ${formatShutter(shutter)}`;
+              return;
+          }
+          if (unlocked === "solve-iso") {
+              const iso = computeIsoFromShutter(sceneEv, fixedShutter, desiredAperture, fixedNd);
+              if (iso < 50 || iso > 102400) {
+                  solveWarning.textContent = "警告：ISO 超出常見範圍，請確認條件。";
+              }
+              const nearest = nearestOption(isoOptions, iso);
+              setWheelValue(solveIso, nearest, true, false);
+              solveResult.textContent = `建議 ISO ${Math.round(iso)}`;
+              return;
+          }
+          if (unlocked === "solve-nd") {
+              const nd = computeNdFromShutter(sceneEv, fixedShutter, desiredAperture, fixedIso);
+              if (nd < 0 || nd > 15) {
+                  solveWarning.textContent = "警告：ND 檔數超出常見範圍，請確認條件。";
+              }
+              const nearest = nearestOption(ndOptions, nd);
+              setWheelValue(solveNd, nearest, true, false);
+              solveResult.textContent = `建議 ND ${formatNdLabel(nd)}`;
+              return;
+          }
+      }
+
+      if (mode === "iso") {
+          if (unlocked === "solve-shutter") {
+              const shutter = computeTargetShutter(sceneEv, fixedAperture, desiredIso, fixedNd);
+              if (shutter < 1 / 8000 || shutter > 1800) {
+                  solveWarning.textContent = "警告：快門時間超出常見範圍，請確認條件。";
+              }
+              const nearest = nearestShutterValue(shutter);
+              setWheelValue(solveShutter, nearest, true, false);
+              solveSuggestedShutter = shutter;
+              solveResult.textContent = `建議快門 ${formatShutter(shutter)}`;
+              return;
+          }
+          if (unlocked === "solve-aperture") {
+              const aperture = computeApertureFromShutter(sceneEv, fixedShutter, desiredIso, fixedNd);
+              if (aperture < 0.7 || aperture > 64) {
+                  solveWarning.textContent = "警告：光圈超出常見範圍，請確認條件。";
+              }
+              const nearest = nearestOption(apertureOptions, aperture);
+              setWheelValue(solveAperture, nearest, true, false);
+              solveResult.textContent = `建議光圈 f/${aperture.toFixed(2)}`;
+              return;
+          }
+          if (unlocked === "solve-nd") {
+              const nd = computeNdFromShutter(sceneEv, fixedShutter, fixedAperture, desiredIso);
+              if (nd < 0 || nd > 15) {
+                  solveWarning.textContent = "警告：ND 檔數超出常見範圍，請確認條件。";
+              }
+              const nearest = nearestOption(ndOptions, nd);
+              setWheelValue(solveNd, nearest, true, false);
+              solveResult.textContent = `建議 ND ${formatNdLabel(nd)}`;
+              return;
+          }
+      }
+
+      if (mode === "nd") {
+          if (unlocked === "solve-shutter") {
+              const shutter = computeTargetShutter(sceneEv, fixedAperture, fixedIso, desiredNd);
+              if (shutter < 1 / 8000 || shutter > 1800) {
+                  solveWarning.textContent = "警告：快門時間超出常見範圍，請確認條件。";
+              }
+              const nearest = nearestShutterValue(shutter);
+              setWheelValue(solveShutter, nearest, true, false);
+              solveSuggestedShutter = shutter;
+              solveResult.textContent = `建議快門 ${formatShutter(shutter)}`;
+              return;
+          }
+          if (unlocked === "solve-iso") {
+              const iso = computeIsoFromShutter(sceneEv, fixedShutter, fixedAperture, desiredNd);
+              if (iso < 50 || iso > 102400) {
+                  solveWarning.textContent = "警告：ISO 超出常見範圍，請確認條件。";
+              }
+              const nearest = nearestOption(isoOptions, iso);
+              setWheelValue(solveIso, nearest, true, false);
+              solveResult.textContent = `建議 ISO ${Math.round(iso)}`;
+              return;
+          }
+          if (unlocked === "solve-aperture") {
+              const aperture = computeApertureFromShutter(sceneEv, fixedShutter, fixedIso, desiredNd);
+              if (aperture < 0.7 || aperture > 64) {
+                  solveWarning.textContent = "警告：光圈超出常見範圍，請確認條件。";
+              }
+              const nearest = nearestOption(apertureOptions, aperture);
+              setWheelValue(solveAperture, nearest, true, false);
+              solveResult.textContent = `建議光圈 f/${aperture.toFixed(2)}`;
+          }
+      }
+  }
 
 
     function syncTargetLocked() {
@@ -640,26 +1273,73 @@
         const locked = button.dataset.locked !== "false";
         target.disabled = locked;
         button.textContent = locked ? "解鎖" : "鎖定";
+        syncWheelDisabled(target, locked);
         if (locked) {
           if (targetId === "target-aperture") target.value = baseAperture.value;
           if (targetId === "target-iso") target.value = baseIso.value;
           if (targetId === "target-nd") target.value = baseNd.value;
+          setWheelValue(target, target.value, true, false);
         }
+      });
+      targetFields.forEach((field) => {
+        const targetId = field.dataset.targetField;
+        const button = document.querySelector(`[data-lock="${targetId}"]`);
+        const locked = button ? button.dataset.locked !== "false" : true;
+        field.classList.toggle("field-highlight", !locked);
       });
     }
 
 
     const inputs = [
       baseAperture, baseShutter, baseIso, baseNd,
-      targetAperture, targetIso, targetNd
+      targetAperture, targetIso, targetNd,
+      solveParam, solveShutter, solveAperture, solveIso, solveNd
     ];
 
     inputs.forEach((input) => {
       input.addEventListener("input", () => {
         syncTargetLocked();
+        syncSolveLocked();
         if (countdownTimer) stopCountdown("--");
         render();
       });
+    });
+
+    solveParam.addEventListener("input", () => {
+      syncSolveLocked(true);
+      render();
+    });
+
+    solveLockButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const isLocked = button.dataset.locked !== "false";
+        solveLockButtons.forEach((other) => {
+          if (other !== button && other.dataset.solveLock !== `solve-${solveParam.value}`) {
+            other.dataset.locked = "true";
+          }
+        });
+        button.dataset.locked = isLocked ? "false" : "true";
+        syncSolveLocked();
+        render();
+      });
+    });
+
+    modeToggles.forEach((button) => {
+      button.addEventListener("click", () => {
+        countdownMode = button.dataset.mode;
+        modeToggles.forEach((item) => item.classList.toggle("active", item === button));
+        targetSection.classList.toggle("active-mode", countdownMode === "target");
+        solveSection.classList.toggle("active-mode", countdownMode === "solve");
+        if (countdownTimer) stopCountdown("--");
+        render();
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      const wheel = event.target.closest(".wheel");
+      if (!wheel) {
+        document.querySelectorAll(".wheel").forEach((item) => item.classList.add("collapsed"));
+      }
     });
 
     lockButtons.forEach((button) => {
@@ -674,10 +1354,11 @@
     countdownBtn.addEventListener("click", startCountdown);
     populateOptions();
     syncTargetLocked();
+    syncSolveLocked(true);
+    targetSection.classList.toggle("active-mode", countdownMode === "target");
+    solveSection.classList.toggle("active-mode", countdownMode === "solve");
+    modeToggles.forEach((item) => item.classList.toggle("active", item.dataset.mode === countdownMode));
     render();
   </script>
 </body>
 </html>
-
-
-
